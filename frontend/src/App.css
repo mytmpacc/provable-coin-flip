@@ -1,0 +1,17 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app > div {
+  margin: 10px;
+}
+
+.submit-box {
+  border: solid aliceblue;
+  padding: 10px;
+}
+.submit-box input {
+  margin-right: 10px;
+}
