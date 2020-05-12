@@ -19,7 +19,7 @@ contract CoinFlipProvable is usingProvable {
     mapping(address => Bet) public bets;
     mapping(bytes32 => address payable) public randomQueries;
 
-    event NewBet(address player, bool win, uint value);
+    event NewBet(address indexed player, bool win, uint value);
 
     function __callback(bytes32 queryId, string memory result) public override {
         require(msg.sender == provable_cbAddress());
@@ -28,7 +28,7 @@ contract CoinFlipProvable is usingProvable {
         Bet storage bet = bets[player];
         bet.win = random;
         bet.waiting = false;
-        emit NewBet(msg.sender, random, bet.value);
+        emit NewBet(player, random, bet.value);
     }
 
     function commitBet() public payable {

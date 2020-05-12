@@ -29,10 +29,14 @@ class App extends React.Component {
 
     this.setState({ contract, accounts });
 
-    contract.events.NewBet((...args) => {
-      console.log('event NewBet', args);
-    })
-
+    contract.once('NewBet', { filter: { player: accounts[0] }, fromBlock: 'latest' }, (err, event) => {
+      console.log('once event NewBet', err, event);
+      let { win } = event.returnValues;
+      this.fetchBalances();
+      this.checkBet();
+      alert(`Bet is complete! You're ${win ? 'win' : 'loose'}`);
+    });
+  
     await Promise.all([this.fetchBalances(), this.checkBet()]);
   }
 
@@ -96,8 +100,8 @@ class App extends React.Component {
           <input type='text' onChange={handleChange} />
           <button onClick={submitBet}>Submit bet</button>
         </div>}
-        <div><button onClick={this.checkBet}>Check bet</button></div>
-        <div><button onClick={withdraw}>Withdraw</button></div>
+        <div>{!waiting && <button onClick={this.checkBet}>Check bet</button>}</div>
+        <div>{!waiting && <button onClick={withdraw}>Withdraw</button>}</div>
       </div>
     );
   }
